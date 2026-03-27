@@ -1,0 +1,8 @@
+# Streamlit secrets (로컬 전용 — Git에 올리지 마세요)
+.streamlit/secrets.toml
+
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
