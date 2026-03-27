@@ -3210,18 +3210,26 @@ def main() -> None:
             for c in ["🔐 치안점수(0~100)", "🌦️ 기후점수(0~100)", "⭐ 종합점수(0~100)"]:
                 df_top_tbl[c] = df_top_tbl[c].map(lambda x: None if pd.isna(x) else int(round(float(x))))
             df_top_tbl = df_top_tbl.sort_values("⭐ 종합점수(0~100)", ascending=False)
-            styled_top_tbl = df_top_tbl.style.background_gradient(
-                cmap="RdYlGn",
-                subset=["⭐ 종합점수(0~100)"],
-                axis=0,
-            )
-
-            st.dataframe(
-                styled_top_tbl,
-                use_container_width=True,
-                hide_index=True,
-                height=380,
-            )
+            try:
+                styled_top_tbl = df_top_tbl.style.background_gradient(
+                    cmap="RdYlGn",
+                    subset=["⭐ 종합점수(0~100)"],
+                    axis=0,
+                )
+                st.dataframe(
+                    styled_top_tbl,
+                    use_container_width=True,
+                    hide_index=True,
+                    height=380,
+                )
+            except ImportError:
+                # matplotlib 미설치 환경(Streamlit Cloud 초기 배포 등)에서도 표는 정상 노출
+                st.dataframe(
+                    df_top_tbl,
+                    use_container_width=True,
+                    hide_index=True,
+                    height=380,
+                )
             st.markdown(
                 "<span style='color: white;'>* 종합점수 가중치: 치안 70% + 기후 30%</span>",
                 unsafe_allow_html=True,
